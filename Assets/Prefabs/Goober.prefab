@@ -345,6 +345,8 @@ GameObject:
   - component: {fileID: 8469398193901341293}
   - component: {fileID: 2728305208945212632}
   - component: {fileID: 6770800610153750265}
+  - component: {fileID: 8390680674357515273}
+  - component: {fileID: 4390996525865876900}
   m_Layer: 0
   m_Name: Goober
   m_TagString: goob
@@ -426,6 +428,56 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   destination: {fileID: 0}
   agent: {fileID: 2728305208945212632}
+--- !u!136 &8390680674357515273
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2102843464628454191}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.6463982
+  m_Height: 2.212564
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.606282, z: -0.014783025}
+--- !u!54 &4390996525865876900
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2102843464628454191}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &3400051081413948277
 GameObject:
   m_ObjectHideFlags: 0

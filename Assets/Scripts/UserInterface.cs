@@ -7,6 +7,9 @@ public class UserInterface : MonoBehaviour
 {
     public GameObject RocketPrefab;
     public GameObject CannonPrefab;
+    public GameObject FlamerPrefab;
+
+
     public GameObject WeaponMenu;
 
     GameObject focusObject;
@@ -27,6 +30,12 @@ public class UserInterface : MonoBehaviour
     public void CannonButton()
     {
         itemPrefab = CannonPrefab;
+        CreateItemOnClick();
+    }
+
+    public void FlamerButton()
+    {
+        itemPrefab = FlamerPrefab;
         CreateItemOnClick();
     }
 
