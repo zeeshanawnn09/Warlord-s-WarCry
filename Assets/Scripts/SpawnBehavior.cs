@@ -6,19 +6,18 @@ public class SpawnBehavior : MonoBehaviour
 {
     public GameObject enemyPrefab;
     public Transform endPoint;
-    public int maxSpawn = 10;
 
-
-    [SerializeField] private float _spawnRate = 0.3f;
-    [SerializeField] private int _spawnTime = 1;
-
+    
+    public int maxSpawn = 50;
+    public int spawnRate = 5;
+    public float spawnDelay = 3.0f;
 
     int count = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        InvokeRepeating("Spawner", _spawnTime, _spawnRate); 
+        InvokeRepeating("Spawner", spawnDelay, spawnRate); 
     }
 
     void Spawner()
@@ -26,18 +25,9 @@ public class SpawnBehavior : MonoBehaviour
         GameObject enemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
         enemy.GetComponent<Endpoint>().destination = endPoint;
         count++;
-       
-    }
-
-    private void Update()
-    {
-        if ( count == maxSpawn)
+        if (count >= maxSpawn)
         {
             CancelInvoke("Spawner");
-        }
-        else
-        {
-            Spawner();
         }
     }
 }

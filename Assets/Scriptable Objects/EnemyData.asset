@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: EnemyData
   m_EditorClassIdentifier: 
   Name: goob
-  speed: 5
+  speed: 1
   maxHealth: 100

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,9 +27,26 @@ public class Endpoint : MonoBehaviour
         curr_health = enemyData.maxHealth;
         HealthBar = Instantiate(HealthBar_Prefab, transform.position, Quaternion.identity);
         HealthBar.transform.SetParent(GameObject.Find("Canvas").transform);
-        
+
+        HealthBar.maxValue = enemyData.maxHealth;
+        HealthBar.value = enemyData.maxHealth;
+
     }
 
+    public void OnPlayerHit(int damage)
+    {
+        //if the bullet hits the player, the health bar will decrease
+        if (HealthBar)
+        {
+            HealthBar.value -= damage;
+            if (HealthBar.value <= 0)
+            {
+                Destroy(HealthBar.gameObject);
+                Destroy(this.gameObject);
+                Debug.Log("Enemy Died");
+            }
+        }
+    }
     // Update is called once per frame
     void Update()
     {
@@ -38,6 +56,7 @@ public class Endpoint : MonoBehaviour
             LevelManager.EnemyDied();
             agent.ResetPath();
             Destroy(this.gameObject, 0.1f);
+            Destroy(HealthBar.gameObject);
         }
 
         if (HealthBar)
