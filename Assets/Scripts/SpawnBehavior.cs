@@ -9,7 +9,7 @@ public class SpawnBehavior : MonoBehaviour
 
     
     public int maxSpawn = 50;
-    public int spawnRate = 5;
+    public float spawnRate = 5;
     public float spawnDelay = 3.0f;
 
     int count = 0;

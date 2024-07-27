@@ -1,7 +1,7 @@
 using UnityEngine;
 
 // This script is a ScriptableObject that will be used to store the enemy details
-[CreateAssetMenu(fileName = "EnemyData", menuName = "ScriptableObject/EnemyDetails", order = 5)]
+[CreateAssetMenu(fileName = "EnemyData", menuName = "ScriptableObject/EnemyDetails", order = 1)]
 public class EnemyData : ScriptableObject
 {
     public string Name;

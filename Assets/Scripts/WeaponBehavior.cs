@@ -9,11 +9,15 @@ public class WeaponBehavior : MonoBehaviour
     public GameObject turret_core;
     public GameObject turret_barrel;
 
+    public WeaponsData WeaponProperties;
+    public AudioSource firing_sound;
+
     Quaternion turret_core_start_rotation;
     Quaternion turret_barrel_start_rotation;
 
     Endpoint curr_target_code;
 
+    bool ShootingCoolDown = true;
 
 
     // Start is called before the first frame update
@@ -42,12 +46,21 @@ public class WeaponBehavior : MonoBehaviour
         }
     }
 
-    //when the bullet hits the target
+    //when the bullet is shot, the weapon goes into cooldown
+    void ShootCoolDown()
+    {
+        ShootingCoolDown = true;
+    }
+
+    //when the bullet is shot 
     void BulletBehavior()
     {
-        if (curr_target)
+        if (curr_target && ShootingCoolDown)
         {
-            curr_target_code.OnPlayerHit(1);
+            curr_target_code.OnPlayerHit((int)WeaponProperties.Damage);
+            firing_sound.Play();
+            ShootingCoolDown = false;
+            Invoke("ShootCoolDown", WeaponProperties.ReloadTime);
         }
     }
 
@@ -68,18 +81,24 @@ public class WeaponBehavior : MonoBehaviour
             
             //rotating the turret
             turret_barrel.transform.rotation = Quaternion.Slerp(turret_barrel.transform.rotation,
-                Quaternion.LookRotation(RelTargetPos - turret_barrel.transform.position), Time.deltaTime);
+                Quaternion.LookRotation(RelTargetPos - turret_barrel.transform.position), Time.deltaTime * WeaponProperties.TurnSpeed);
 
             //rotating the core of the turret
-            turret_core.transform.rotation = Quaternion.Slerp(turret_core.transform.rotation, Quaternion.LookRotation(aimAt - turret_core.transform.position), Time.deltaTime);
+            turret_core.transform.rotation = Quaternion.Slerp(turret_core.transform.rotation, Quaternion.LookRotation(aimAt - turret_core.transform.position), Time.deltaTime * WeaponProperties.TurnSpeed);
 
             //making sure the turret is facing the target
             Vector3 GunFaceTowardsTarget = curr_target.transform.position - turret_barrel.transform.position;
 
-            //if the angle between the turret and the target is less than 10 degrees, shoot the bullet
-            if (Vector3.Angle(GunFaceTowardsTarget, turret_barrel.transform.forward) < 10)
+
+            //if the angle between the turret and the target is less than the aim accuracy, shoot the bullet
+            if (Vector3.Angle(GunFaceTowardsTarget, turret_barrel.transform.forward) < WeaponProperties.AimAccuracy)
                 {
-                    BulletBehavior();
+                    if (Random.Range(0, 100) < WeaponProperties.FireAccuracy)
+                       {
+
+                           BulletBehavior();
+
+                       }
                 }
         }
 
@@ -87,9 +106,9 @@ public class WeaponBehavior : MonoBehaviour
         {
             //if there is no target, reset the turret to its original position
             turret_barrel.transform.localRotation = Quaternion.Slerp(turret_barrel.transform.localRotation,
-               turret_barrel_start_rotation, Time.deltaTime);
+               turret_barrel_start_rotation, Time.deltaTime * WeaponProperties.TurnSpeed);
 
-            turret_core.transform.rotation = Quaternion.Slerp(turret_core.transform.rotation, turret_core_start_rotation, Time.deltaTime);
+            turret_core.transform.rotation = Quaternion.Slerp(turret_core.transform.rotation, turret_core_start_rotation, Time.deltaTime * WeaponProperties.TurnSpeed);
         }
     }
 
