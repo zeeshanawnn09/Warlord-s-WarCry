@@ -117,7 +117,8 @@ public class UserInterface : MonoBehaviour
                                                              focusObject.transform.position.y,
                                                              hit.collider.gameObject.transform.position.z);
 
-                focusObject.GetComponent<Collider>().enabled = true;
+                focusObject.GetComponent<BoxCollider>().enabled = true;
+                focusObject.GetComponent<SphereCollider>().enabled = true;
             }
             else
             {
