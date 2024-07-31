@@ -11,6 +11,7 @@ public class WeaponBehavior : MonoBehaviour
 
     public WeaponsData WeaponProperties;
     public AudioSource firing_sound;
+    public ParticleSystem particleSystem;
 
     Quaternion turret_core_start_rotation;
     Quaternion turret_barrel_start_rotation;
@@ -25,6 +26,7 @@ public class WeaponBehavior : MonoBehaviour
     {
         turret_core_start_rotation = turret_core.transform.rotation;
         turret_barrel_start_rotation = turret_barrel.transform.localRotation;
+        particleSystem.Stop();
     }
 
     //when target enters the collider of weapon
@@ -59,6 +61,7 @@ public class WeaponBehavior : MonoBehaviour
         {
             curr_target_code.OnPlayerHit((int)WeaponProperties.Damage);
             firing_sound.Play();
+            particleSystem.Emit(100);
             ShootingCoolDown = false;
             Invoke("ShootCoolDown", WeaponProperties.ReloadTime);
         }
