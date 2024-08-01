@@ -4979,7 +4979,9 @@ MonoBehaviour:
   turret_barrel: {fileID: 7207796835047836771}
   WeaponProperties: {fileID: 11400000, guid: 8ec3940bf23a0344fa55ad6b724f78d6, type: 2}
   firing_sound: {fileID: 2897968325839618242}
-  particleSystem: {fileID: 2601234451707191141}
+  particleSystem:
+  - {fileID: 2601234451707191141}
+  BurstCount: 100
 --- !u!82 &2897968325839618242
 AudioSource:
   m_ObjectHideFlags: 0
