@@ -41,9 +41,12 @@ public class Endpoint : MonoBehaviour
             HealthBar.value -= damage;
             if (HealthBar.value <= 0)
             {
+                //Instantiate explosion when the enemy dies and destroy the enemy
+                LevelManager.CreateExplosion(this.transform.position + new Vector3(0, 0.5f, 0));
                 Destroy(HealthBar.gameObject);
                 Destroy(this.gameObject);
-                Debug.Log("Enemy Died");
+
+                //Debug.Log("Enemy Died");
             }
         }
     }
