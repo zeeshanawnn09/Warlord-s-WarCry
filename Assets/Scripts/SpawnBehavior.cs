@@ -6,7 +6,6 @@ public class SpawnBehavior : MonoBehaviour
 {
     public GameObject enemyPrefab;
     public Transform endPoint;
-
     
     public int maxSpawn = 50;
     public float spawnRate = 5;
@@ -15,8 +14,13 @@ public class SpawnBehavior : MonoBehaviour
     int count = 0;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
+        Restart();
+    }
+    public void Restart()
+    {
+        count = 0;
         InvokeRepeating("Spawner", spawnDelay, spawnRate); 
     }
 
