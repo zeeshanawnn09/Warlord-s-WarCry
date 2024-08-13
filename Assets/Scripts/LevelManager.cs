@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -13,8 +14,11 @@ public class LevelManager : MonoBehaviour
     public ParticleSystem explosionParticle;
     public static IObjectPool<ParticleSystem> explosionpool;
 
-    static int TotalWaves = 3;
-    static int WavesEmitted = 0;
+    public static int TotalWaves = 3;
+    public static int WavesEmitted = 0;
+    public static int MoneyGained = 200;
+    public static int MaxLives = 10;
+
     static bool LvlOver = false;
     static bool nxtWave = false;
 
@@ -24,7 +28,7 @@ public class LevelManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Time.timeScale = 30;
+        Time.timeScale = 1;
         GameObject[] spawnP = GameObject.FindGameObjectsWithTag("Spawn");
         spawnPoints = new SpawnBehavior[spawnP.Length]; 
         for (int i = 0; i < spawnP.Length; i++)
@@ -35,6 +39,11 @@ public class LevelManager : MonoBehaviour
 
         //create the object pool
         explosionpool = new ObjectPool<ParticleSystem>(CreateDeathExplosion, OnTakenFromPool, OnReturnToPool, null, true, 10, 20);
+    }
+
+    public static void WaveSpeed(int speed)
+    {
+        Time.timeScale = speed;
     }
 
     ParticleSystem CreateDeathExplosion()
@@ -77,6 +86,17 @@ public class LevelManager : MonoBehaviour
                 LvlOver = true;
                 nxtWave = false;
             }
+        }
+    }
+
+    public static void ReduceLives()
+    {
+        MaxLives--;
+        if (MaxLives <= 0)
+        {
+            Debug.Log("Game Over");
+            LvlOver = true;
+            nxtWave = false;
         }
     }
 

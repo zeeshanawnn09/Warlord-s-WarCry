@@ -41,12 +41,14 @@ public class Endpoint : MonoBehaviour
             HealthBar.value -= damage;
             if (HealthBar.value <= 0)
             {
-                //Instantiate explosion when the enemy dies and destroy the enemy
+                //Instantiate enemy death explosion and destroy the enemy also increase the money gained
+                LevelManager.MoneyGained += enemyData.Reward;
+                LevelManager.EnemyDied();
                 LevelManager.CreateExplosion(this.transform.position + new Vector3(0, 0.5f, 0));
                 Destroy(HealthBar.gameObject);
                 Destroy(this.gameObject);
 
-                //Debug.Log("Enemy Died");
+            
             }
         }
     }
@@ -56,6 +58,7 @@ public class Endpoint : MonoBehaviour
         //when player reaches a certain point in the game, it'll be destroyed
         if (agent.remainingDistance < 0.5f && agent.hasPath)
         {
+            LevelManager.ReduceLives();
             LevelManager.EnemyDied();
             agent.ResetPath();
             Destroy(this.gameObject, 0.1f);

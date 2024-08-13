@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b8079428db2c3749881f2275f3a27b0, type: 3}
   m_Name: FlamerProperties
   m_EditorClassIdentifier: 
-  Damage: 3
-  FireAccuracy: 85
+  Damage: 70
+  FireAccuracy: 95
   TurnSpeed: 2
   ReloadTime: 3
   AimAccuracy: 25
+  buildCost: 50

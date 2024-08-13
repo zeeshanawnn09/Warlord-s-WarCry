@@ -10,6 +10,7 @@ public class WeaponsData : ScriptableObject
     public float TurnSpeed;
     public float ReloadTime;
     public float AimAccuracy;
+    public int buildCost;
 
     // Start is called before the first frame update
     void Start()

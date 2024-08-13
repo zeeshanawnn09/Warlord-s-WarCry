@@ -2,15 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class UserInterface : MonoBehaviour
 {
-    public GameObject RocketPrefab;
-    public GameObject CannonPrefab;
-    public GameObject FlamerPrefab;
-
+    public WeaponBehavior RocketPrefab;
+    public WeaponBehavior CannonPrefab;
+    public WeaponBehavior FlamerPrefab;
 
     public GameObject WeaponMenu;
+
+    public TMPro.TMP_Text Wave_txt;
+    public TMPro.TMP_Text Money_txt;
+    public TMPro.TMP_Text Lives_txt;
+
+    public Button slowBtn;
+    public Button fastBtn;
+    public Button superfastBtn;
+
+    public AudioSource InsufficientCash_snd;
 
     GameObject focusObject;
     GameObject itemPrefab;
@@ -18,31 +28,81 @@ public class UserInterface : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        BtnListener();
+    }
+
+    void BtnListener()
+    {
+        slowBtn.onClick.AddListener(SlowButton);
+        fastBtn.onClick.AddListener(FastButton);
+        superfastBtn.onClick.AddListener(SuperFastButton);
+    }
+
+    public void SlowButton()
+    {
+        LevelManager.WaveSpeed(1);
+    }
+
+    public void FastButton()
+    {
+        LevelManager.WaveSpeed(5);
+    }
+
+    public void SuperFastButton()
+    {
+        LevelManager.WaveSpeed(10);
     }
 
     public void RocketButton()
     {
-        itemPrefab = RocketPrefab;
-        CreateItemOnClick();
+        //check if the player has enough money to build the turret
+        if (LevelManager.MoneyGained >= RocketPrefab.WeaponProperties.buildCost)
+        {
+            itemPrefab = RocketPrefab.gameObject;
+            CreateItemOnClick();
+            LevelManager.MoneyGained -= RocketPrefab.WeaponProperties.buildCost;
+        }
+        //if the player doesn't have enough money, play the insufficient cash sound
+        else
+        {
+            InsufficientCash_snd.Play();
+        }
     }
 
     public void CannonButton()
     {
-        itemPrefab = CannonPrefab;
-        CreateItemOnClick();
+        if (LevelManager.MoneyGained >= CannonPrefab.WeaponProperties.buildCost)
+        {
+            itemPrefab = CannonPrefab.gameObject;
+            CreateItemOnClick();
+            LevelManager.MoneyGained -= CannonPrefab.WeaponProperties.buildCost;
+        }
+        else
+        {
+            InsufficientCash_snd.Play();
+        }
     }
 
     public void FlamerButton()
     {
-        itemPrefab = FlamerPrefab;
-        CreateItemOnClick();
+        if (LevelManager.MoneyGained >= FlamerPrefab.WeaponProperties.buildCost)
+        {
+            itemPrefab = FlamerPrefab.gameObject;
+            CreateItemOnClick();
+            LevelManager.MoneyGained -= FlamerPrefab.WeaponProperties.buildCost;
+        }
+        else
+        {
+            InsufficientCash_snd.Play();
+        }
     }
 
     public void CloseButton()
     {
         WeaponMenu.SetActive(false);
     }
+
+    //create the turret on the mouse position
     void CreateItemOnClick()
     {
         RaycastHit hit;
@@ -123,13 +183,41 @@ public class UserInterface : MonoBehaviour
             else
             {
                 Destroy(focusObject);
+                LevelManager.MoneyGained += focusObject.GetComponent<WeaponBehavior>().WeaponProperties.buildCost;
                 focusObject = null;
             }
             }
     }
+
+    //display the wave count
+    void WaveCount()
+    {
+        if (LevelManager.WavesEmitted < LevelManager.TotalWaves)
+        {
+            Wave_txt.text = "Wave: " + (LevelManager.WavesEmitted + 1) + " of " + LevelManager.TotalWaves;
+        }
+    }
+
+    //display the money gained
+    void MoneyUpdater()
+    {
+        Money_txt.text = "Money: $ " + LevelManager.MoneyGained;
+    }
+
+    void LivesUpdater()
+    {
+        if (LevelManager.MaxLives >= 0)
+        {
+            Lives_txt.text = "Lives: " + LevelManager.MaxLives;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
+        LivesUpdater();
+        MoneyUpdater();
+        WaveCount();
         MouseBehavior();
     }
 

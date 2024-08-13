@@ -7,6 +7,7 @@ public class EnemyData : ScriptableObject
     public string Name;
     public float speed;
     public int maxHealth;
+    public int Reward;
 
     // Start is called before the first frame update
     void Start()
