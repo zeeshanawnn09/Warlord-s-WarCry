@@ -9,18 +9,20 @@ using UnityEngine.Pool;
 public class LevelManager : MonoBehaviour
 {
     SpawnBehavior[] spawnPoints;
-    static int totalEnemies = 0;
+
+    public GameObject gameOver_panel;
 
     public ParticleSystem explosionParticle;
     public static IObjectPool<ParticleSystem> explosionpool;
 
+    public static int totalEnemies = 0;
     public static int TotalWaves = 3;
     public static int WavesEmitted = 0;
     public static int MoneyGained = 200;
     public static int MaxLives = 10;
 
-    static bool LvlOver = false;
-    static bool nxtWave = false;
+    public static bool LvlOver = false;
+    public static bool nxtWave = false;
 
     int TimeBetweenWaves = 50;
 
@@ -112,10 +114,18 @@ public class LevelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //if the wave is over, reset the spawner
         if (nxtWave)
         {
             nxtWave = false;
             Invoke("ResetSpawner", TimeBetweenWaves);
+        }
+
+        //if the level is over, display the game over panel
+        if (LvlOver)
+        {
+            Time.timeScale = 0;
+            gameOver_panel.SetActive(true);
         }
     }
 }

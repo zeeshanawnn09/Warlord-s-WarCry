@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UserInterface : MonoBehaviour
 {
@@ -15,12 +16,15 @@ public class UserInterface : MonoBehaviour
     public TMPro.TMP_Text Wave_txt;
     public TMPro.TMP_Text Money_txt;
     public TMPro.TMP_Text Lives_txt;
+    public TMPro.TMP_Text UpgradeBtn_txt;
 
     public Button slowBtn;
     public Button fastBtn;
     public Button superfastBtn;
 
     public AudioSource InsufficientCash_snd;
+
+    private WeaponBehavior _currClickedWeapon;
 
     GameObject focusObject;
     GameObject itemPrefab;
@@ -97,9 +101,37 @@ public class UserInterface : MonoBehaviour
         }
     }
 
-    public void CloseButton()
+    //close the weapon menu
+    public void CloseButton_WM()
     {
         WeaponMenu.SetActive(false);
+    }
+
+    //destroy the turret
+    public void DestroyButton_WM()
+    {
+        //destroy the turret and give the player half of the money spent on the turret
+        Destroy(_currClickedWeapon.gameObject, 0.2f);
+        LevelManager.MoneyGained += (int)(_currClickedWeapon.WeaponProperties.buildCost * 0.5f);
+        CloseButton_WM();
+    }
+
+    //upgrade the turret
+    public void UpgradeButton_WM()
+    {
+        //if the player has enough money, upgrade the turret
+        if (LevelManager.MoneyGained >= _currClickedWeapon.WeaponProperties.buildCost)
+        {
+            //increase the damage of the turret by 20% and double the cost of the turret
+            _currClickedWeapon.WeaponProperties.Damage *= 1.2f;
+            LevelManager.MoneyGained -= _currClickedWeapon.WeaponProperties.buildCost;
+            _currClickedWeapon.WeaponProperties.buildCost *= 2;
+            UpgradeBtn_txt.text = "Upgrade: $" + _currClickedWeapon.WeaponProperties.buildCost;
+        }
+        else
+        {
+            InsufficientCash_snd.Play();
+        }
     }
 
     //create the turret on the mouse position
@@ -134,7 +166,9 @@ public class UserInterface : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit) && hit.collider.CompareTag("Weapon"))
             {
+                _currClickedWeapon = hit.collider.gameObject.GetComponent<WeaponBehavior>();
                 WeaponMenu.transform.position = Input.mousePosition;
+                UpgradeBtn_txt.text = "Upgrade: $" + _currClickedWeapon.WeaponProperties.buildCost;
                 WeaponMenu.SetActive(true);
             }  
         }
@@ -183,6 +217,7 @@ public class UserInterface : MonoBehaviour
             else
             {
                 Destroy(focusObject);
+                hit.collider.gameObject.tag = "Free";
                 LevelManager.MoneyGained += focusObject.GetComponent<WeaponBehavior>().WeaponProperties.buildCost;
                 focusObject = null;
             }
@@ -211,6 +246,27 @@ public class UserInterface : MonoBehaviour
             Lives_txt.text = "Lives: " + LevelManager.MaxLives;
         }
     }
+
+    public void RestartLevel()
+    {
+         LevelManager.totalEnemies = 0;
+         LevelManager.TotalWaves = 3;
+         LevelManager.WavesEmitted = 0;
+         LevelManager.MoneyGained = 200;
+         LevelManager.MaxLives = 10;
+
+         LevelManager.LvlOver = false;
+         LevelManager.nxtWave = false;
+
+         SceneManager.LoadScene("Level 01", LoadSceneMode.Single);
+    }
+
+    public void QuitLevel()
+    {
+        //Stop the game
+        Application.Quit();
+    }
+
 
     // Update is called once per frame
     void Update()
