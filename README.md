@@ -1,6 +1,6 @@
 # Game Design Document
 
-![](https://t9018474082.p.clickup-attachments.com/t9018474082/2acd0274-7735-449b-8868-624368a65628/Background.png)
+![](Assets/Sprites/Background.png)
 
 # **🕹️Warlord's War-Cry**
 
